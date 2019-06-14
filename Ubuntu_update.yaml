@@ -1,0 +1,33 @@
+---
+- hosts: '{{ host }}'
+  remote_user: '{{ user }}'
+  tasks:
+
+    - name: APT - Update cache if its older than 1 hour
+      become: true
+      apt:
+        force_apt_get: yes
+        cache_valid_time: 3600
+        update_cache: yes
+      tags: update
+
+    - name: APT - Update all packages to the latest version
+      become: true
+      apt:
+        force_apt_get: yes
+        upgrade: dist
+      tags: dist-upgrade
+
+    - name: APT - Remove dependencies that are no longer required
+      become: true
+      apt:
+        force_apt_get: yes
+        autoremove: yes
+      tags: clean
+
+    - name: APT - Remove useless packages from the cache
+      become: true
+      apt:
+        force_apt_get: yes
+        autoclean: yes
+      tags: clean
