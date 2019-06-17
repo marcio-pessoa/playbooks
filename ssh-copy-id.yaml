@@ -1,0 +1,18 @@
+---
+- hosts: '{{ host }}'
+  remote_user: '{{ user }}'
+  tasks:
+
+    - name: SSH - Set authorized key taken from file (ansible)
+      authorized_key:
+        user: '{{ user }}'
+        state: present
+        key: "{{ lookup('file', 'keys/id_rsa_ansible.pub') }}"
+      tags: ansible
+
+    - name: SSH - Set authorized key taken from file (marcio.pessoa)
+      authorized_key:
+        user: '{{ user }}'
+        state: present
+        key: "{{ lookup('file', 'keys/id_rsa_marcio.pessoa.pub') }}"
+      tags: marcio.pessoa

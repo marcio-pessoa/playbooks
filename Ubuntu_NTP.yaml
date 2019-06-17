@@ -1,0 +1,62 @@
+---
+- hosts: '{{ host }}'
+  remote_user: '{{ user }}'
+  tasks:
+
+    - name: APT - Install NTP and ntpdate
+      become: true
+      apt:
+        package: [
+          ntp,
+          ntpdate
+        ]
+        state: present
+        cache_valid_time: 3600
+        update_cache: yes
+      tags: ntp
+
+    - name: NTP - Add primary server to configuration file
+      become: true
+      lineinfile:
+        backup: yes
+        path: /etc/ntp.conf
+        state: present
+        insertafter: "^# Use Ubuntu's ntp server as a fallback."
+        line: pool 10.200.1.220
+      tags: ntp
+
+    - name: NTP - Add secondary server to configuration file
+      become: true
+      lineinfile:
+        path: /etc/ntp.conf
+        state: present
+        insertbefore: '^pool ntp.ubuntu.com'
+        line: pool 10.200.1.240
+      tags: ntp
+
+    - name: NTP - Set timezone to America/Sao_Paulo
+      become: true
+      timezone:
+        name: America/Sao_Paulo
+
+    - name: NTP - Make sure it is stopped
+      become: true
+      service:
+        name: ntp
+        state: stopped
+        enabled: yes
+      tags: ntp
+
+    - name: NTP - Sync time
+      become: true
+      shell:
+        ntpdate 10.200.1.220
+      tags: ntp
+
+    - name: NTP - Make sure service is enabled and started up
+      become: true
+      service:
+        name: ntp
+        state: started
+        enabled: yes
+      tags: ntp

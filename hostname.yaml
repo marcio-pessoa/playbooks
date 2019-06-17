@@ -1,0 +1,10 @@
+---
+- hosts: '{{ host }}'
+  remote_user: '{{ user }}'
+  tasks:
+
+    - name: System - Set hostname
+      become: true
+      hostname:
+        name: '{{ host }}'
+      tags: hostname
