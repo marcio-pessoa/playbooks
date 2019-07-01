@@ -1,6 +1,5 @@
 ---
-- hosts: '{{ host }}'
-  remote_user: '{{ user }}'
+- hosts: all
   tasks:
 
     - name: KVM - Install QEMU, KVM, libvirt and bridge-utils
@@ -16,3 +15,22 @@
         cache_valid_time: 3600
         update_cache: yes
       tags: install
+
+    - name: Filesystem - Create VM directory if it does not exist
+      become: true
+      file:
+        path: /home/VM
+        state: directory
+        mode: '0755'
+        owner: sysadm
+        group: sysadm
+      tags: filesystem
+
+    - name: Filesystem - Create Downloads directory if it does not exist
+      file:
+        path: /home/sysadm/Downloads
+        state: directory
+        mode: '0755'
+        owner: sysadm
+        group: sysadm
+      tags: filesystem

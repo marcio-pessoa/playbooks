@@ -1,6 +1,5 @@
 ---
-- hosts: '{{ host }}'
-  remote_user: '{{ user }}'
+- hosts: all
   tasks:
 
     - name: System - Set hostname
