@@ -1,0 +1,8 @@
+---
+- hosts: all
+  tasks:
+
+  - name: Journal - Keep stored just last 5 days
+    become: yes
+    command: 'journalctl --vacuum-time=5d'
+    tags: vacuum
