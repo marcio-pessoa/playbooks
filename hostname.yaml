@@ -2,8 +2,8 @@
 - hosts: all
   tasks:
 
-    - name: System - Set hostname
-      become: true
-      hostname:
-        name: '{{ host }}'
-      tags: hostname
+  - name: System - Set hostname
+    become: true
+    hostname:
+      name: '{{ host }}'
+    tags: hostname
